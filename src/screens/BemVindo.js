@@ -1,4 +1,3 @@
-import * as React from "react";
 import { Image } from "expo-image";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";

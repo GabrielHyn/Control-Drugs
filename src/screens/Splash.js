@@ -1,23 +1,24 @@
-import * as React from "react";
 import { Image } from "expo-image";
-import { StyleSheet, Text, Pressable, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { useEffect } from "react";
 
 const Splash = () => {
   const navigation = useNavigation();
+  useEffect(() => {
+    setTimeout(() => {
+      navigation.navigate('BemVindo');
+    }, 2000);
+  }, []);
 
   return (
     <View style = {styles.container}>
-    <Pressable
-      onPress={() => navigation.navigate("BemVindo")}
-    >
       <Text style={styles.controlDrugs}>Control Drugs</Text>
       <Image
         style={[styles.maosRemedios]}
         contentFit="cover"
         source={require("../../assets/maos.png")}
       />
-    </Pressable>
     </View>
   );
 };
@@ -33,14 +34,14 @@ const styles = StyleSheet.create({
     top: 110,
     left: 75,
     fontSize: 40,
-    color: "#000000",
+    fontWeight: "600",
+    color: "#000",
     textAlign: "center",
     position: "absolute",
   },
   maosRemedios: {
     width: 430,
     height: 775,
-    left: 0,
     position: "absolute",
   },
 });

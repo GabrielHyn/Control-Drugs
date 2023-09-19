@@ -1,4 +1,3 @@
-import * as React from "react";
 import { Image } from "expo-image";
 import { StyleSheet, View, Text} from "react-native";
 import Confirmar from "../components/Confirmar";
