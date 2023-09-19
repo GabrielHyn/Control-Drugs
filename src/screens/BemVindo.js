@@ -6,8 +6,8 @@ import { useNavigation } from "@react-navigation/native";
 const BemVindo = () => {
   const navigation = useNavigation();
 
-  const handleDigitarNome = () => {
-    navigation.navigate("DigitarNome");
+  const handleLogin = () => {
+    navigation.navigate("login");
   };
   
   return (
@@ -18,7 +18,7 @@ const BemVindo = () => {
       </Text>
       <Text style={[styles.tenhaOControle, styles.estilo]}>{`Tenha o controle
   dos seus Remédios`}</Text>
-      <TouchableOpacity onPress={handleDigitarNome}>
+      <TouchableOpacity onPress={handleLogin}>
         <Image
           style={styles.setaIcone}
           contentFit="cover"

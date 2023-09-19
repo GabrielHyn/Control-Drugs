@@ -1,21 +1,16 @@
 import * as React from "react";
 import { Image } from "expo-image";
-import { StyleSheet, Text, Pressable } from "react-native";
+import { StyleSheet, Text, Pressable, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 const Splash = () => {
   const navigation = useNavigation();
 
   return (
+    <View style = {styles.container}>
     <Pressable
-      style={styles.splash}
       onPress={() => navigation.navigate("BemVindo")}
     >
-      <Image
-        style={[styles.background]}
-        contentFit="cover"
-        source={require("../../assets/telaInicial.png")}
-      />
       <Text style={styles.controlDrugs}>Control Drugs</Text>
       <Image
         style={[styles.maosRemedios]}
@@ -23,13 +18,16 @@ const Splash = () => {
         source={require("../../assets/maos.png")}
       />
     </Pressable>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  background: {
-    width: 1000,
-    height: 1200,
+  container: {
+    flex: 1,
+    width: "100%",
+    height: "100%",
+    backgroundColor: "#836FFF"
   },
   controlDrugs: {
     top: 110,

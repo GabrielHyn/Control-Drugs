@@ -1,10 +1,10 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import BemVindo from '../screens/BemVindo';
-import DigitarNome from '../screens/DigitarNome';
 import Splash from '../screens/Splash';
 import CadastrarRemedio from "../screens/CadastrarRemedio";
 import RemedioCadastrado from "../screens/RemedioCadastrado";
+import Login from "../screens/login";
 
 const Stack = createNativeStackNavigator();
 
@@ -24,8 +24,8 @@ function Routes() {
             options={{ headerShown: false }}
           />
           <Stack.Screen
-            name="DigitarNome"
-            component={DigitarNome}
+            name="login"
+            component={Login}
             options={{ headerShown: false }}
           />
           <Stack.Screen
