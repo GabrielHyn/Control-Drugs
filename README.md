@@ -1,3 +1,3 @@
 # Control-Drugs
 
-Um app de controle de Horarios para tomar o seu Remédio.
+Um app de controle de horarios para tomar o seu Remédio.
