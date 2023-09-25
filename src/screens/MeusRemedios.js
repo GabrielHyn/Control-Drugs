@@ -59,10 +59,10 @@ const MeusRemedios = () => {
 
       if (novoMedicamentoMaisProximo) {
         setTempoRestante(novoMedicamentoMaisProximo.hora - horaAtual);
-        medicamentoMaisProximoNome.current = novoMedicamentoMaisProximo.nome; // Atualizamos o valor usando useRef
+        medicamentoMaisProximoNome.current = novoMedicamentoMaisProximo.nome;
       } else {
         setTempoRestante(0);
-        medicamentoMaisProximoNome.current = ""; // Se não houver medicamentos futuros, definimos como vazio
+        medicamentoMaisProximoNome.current = "";
       }
     };
 
@@ -103,7 +103,7 @@ const MeusRemedios = () => {
       <View style={styles.oSeuRemedioContainer}>
         <Text style={styles.oSeuRemedio}>
           {tempoRestante > 0
-            ? `Faltam ${horasRestantesProximo} horas e ${minutosRestantesProximo} minutos para o seu remédio ${medicamentoMaisProximoNome.current}` // Usamos medicamentoMaisProximoNome.current aqui para exibir o nome do medicamento
+            ? `Faltam ${horasRestantesProximo} horas e ${minutosRestantesProximo} minutos para o seu remédio ${medicamentoMaisProximoNome.current}`
             : "Não há medicamentos futuros."}
         </Text>
       </View>
