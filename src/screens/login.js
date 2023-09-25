@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Input from '../components/Input';
 import { useNavigation } from "@react-navigation/native";
+import {app} from "../config/firebase"
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 const Login = () => {
     const navigation = useNavigation();
@@ -9,7 +11,18 @@ const Login = () => {
     const [senha, setSenha] = useState('');
 
     const handleLogin = () => {
-        navigation.navigate("CadastrarRemedio");
+      const auth = getAuth(app);
+        signInWithEmailAndPassword(auth, email, senha)
+            .then((credenciais)=>{
+                alert('Usuário autenticado')
+                navigation.navigate("MeusRemedios");
+            })
+            .catch((error)=>{
+              alert("Não possível autenticar");
+              console.log(error);
+          })        
+        
+
   };
 
   return (
@@ -21,8 +34,8 @@ const Login = () => {
             onChangeText={text => setEmail(text)}
         />
         <Input
-            placeholder="Senha"
-            secureTextEntry={true}
+            placeholder="senha"
+            senha={true}
             value={senha}
             onChangeText={text => setSenha(text)}
         />

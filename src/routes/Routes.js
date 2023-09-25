@@ -5,6 +5,7 @@ import Splash from '../screens/Splash';
 import CadastrarRemedio from "../screens/CadastrarRemedio";
 import RemedioCadastrado from "../screens/RemedioCadastrado";
 import Login from "../screens/login";
+import MeusRemedios from "../screens/MeusRemedios";
 
 const Stack = createNativeStackNavigator();
 
@@ -36,6 +37,11 @@ function Routes() {
           <Stack.Screen
             name="RemedioCadastrado"
             component={RemedioCadastrado}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="MeusRemedios"
+            component={MeusRemedios}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>
