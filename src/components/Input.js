@@ -3,7 +3,7 @@ import { View, TextInput, StyleSheet } from 'react-native';
 
 const Input = ({
     placeholder,
-    secureTextEntry,
+    senha,
     value,
     onChangeText 
 }) => {
@@ -12,7 +12,7 @@ const Input = ({
       <TextInput
         style={styles.input}
         placeholder={placeholder}
-        secureTextEntry={secureTextEntry}
+        secureTextEntry={senha}
         value={value}
         onChangeText={onChangeText}
       />
