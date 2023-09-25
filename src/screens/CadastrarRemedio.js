@@ -8,7 +8,6 @@ import { useState } from "react";
 const CadastrarRemedio = () => {
   const navigation = useNavigation();
 
-<<<<<<< HEAD
   const [medicamentoCadastrado, setMedicamentoCadastrado] = useState({
     nome: "",
     dosagem: "",
@@ -33,25 +32,6 @@ const CadastrarRemedio = () => {
       horario: "",
     });
     
-=======
-  const [medicamentos, setMedicamentos] = useState([]);
-  const [nomeRemedio, setNomeRemedio] = useState("");
-  const [horarioRemedio, setHorarioRemedio] = useState("");
-  const [dosagemRemedio, setDosagemRemedio] = useState("");
-  const [descricaoRemedio, setDescricaoRemedio] = useState("");
-
-  const handleRemedioCadastrado = () => {
-    if (nomeRemedio && horarioRemedio) {
-      setMedicamentos([
-        ...medicamentos,
-        { nome: nomeRemedio, horario: horarioRemedio, dosagemRemedio, descricaoRemedio },
-      ]);
-      setNomeRemedio("");
-      setHorarioRemedio("");
-      setDosagemRemedio("");
-      setDescricaoRemedio("");
-    }
->>>>>>> 1c8a958e4feffbaa161df808066bb3a2ac201b24
     navigation.navigate("RemedioCadastrado");
   };
 
@@ -74,7 +54,6 @@ const CadastrarRemedio = () => {
           style={styles.input}
           placeholder="Insira o nome do remédio"
           placeholderTextColor="gray"
-<<<<<<< HEAD
           onChangeText={(text) =>
             setMedicamentoCadastrado({
               ...medicamentoCadastrado,
@@ -122,32 +101,6 @@ const CadastrarRemedio = () => {
           }
           value={medicamentoCadastrado.horario}
         />
-=======
-          onChangeText={(text) => setNomeRemedio(text)}
-          value={nomeRemedio}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Informe a dosagem"
-          placeholderTextColor="gray"
-          onChangeText={(text) => setDosagemRemedio(text)}
-          value={dosagemRemedio}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Para que serve esse medicamento?"
-          placeholderTextColor="gray"
-          onChangeText={(text) => setDescricaoRemedio(text)}
-          value={descricaoRemedio}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Horário do medicamento"
-          placeholderTextColor="gray"
-          onChangeText={(text) => setHorarioRemedio(text)}
-          value={horarioRemedio}
-        />
->>>>>>> 1c8a958e4feffbaa161df808066bb3a2ac201b24
       </View>
       <TouchableOpacity onPress={handleRemedioCadastrado}>
         <Confirmar />

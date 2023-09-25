@@ -14,10 +14,6 @@ const Login = () => {
       const auth = getAuth(app);
         signInWithEmailAndPassword(auth, email, senha)
             .then((credenciais)=>{
-<<<<<<< HEAD
-=======
-                alert('Usuário autenticado')
->>>>>>> 1c8a958e4feffbaa161df808066bb3a2ac201b24
                 navigation.navigate("MeusRemedios");
             })
             .catch((error)=>{
