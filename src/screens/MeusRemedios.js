@@ -1,69 +1,82 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Text, StyleSheet, View, TouchableOpacity } from "react-native";
+import {
+  Text,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import Remedio from "../components/remedio";
 import { useNavigation } from "@react-navigation/native";
-
-const medicamentos = [
-  {
-    key: "diazepam",
-    sourceImagem: require("../../assets/remedioAmarelo.png"),
-    nome: "Diazepam",
-    hora: "20:30",
-  },
-  {
-    key: "Clonidina",
-    sourceImagem: require("../../assets/remedioVermelho.png"),
-    nome: "Clonidina",
-    hora: "15:00",
-  },
-  {
-    key: "Omeprazol",
-    sourceImagem: require("../../assets/remedioAmarelo.png"),
-    nome: "Omeprazol",
-    hora: "17:30",
-  },
-  {
-    key: "Buscopam",
-    sourceImagem: require("../../assets/remedioVermelho.png"),
-    nome: "Buscopam",
-    hora: "18:30",
-  },
-];
+import { collection, getDocs, doc, deleteDoc } from "firebase/firestore";
+import { db } from "../config/firebase";
+import { useFocusEffect } from "@react-navigation/native";
 
 const MeusRemedios = () => {
   const navigation = useNavigation();
   const [tempoRestante, setTempoRestante] = useState(0);
-  const medicamentoMaisProximoNome = useRef(""); // Usamos useRef para armazenar o nome do medicamento mais próximo
+  const medicamentoMaisProximoNome = useRef("");
+
+  const [medicamentos, setMedicamentos] = useState([]);
+
+  const carregarMedicamentos = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, "remedios"));
+      const medicamentosArray = [];
+
+      querySnapshot.forEach((doc) => {
+        const medicamento = {
+          id: doc.id,
+          ...doc.data(),
+        };
+        medicamentosArray.push(medicamento);
+      });
+
+      setMedicamentos(medicamentosArray);
+    } catch (error) {
+      console.error("Erro ao carregar medicamentos: ", error);
+    }
+  };
+
+  useEffect(() => {
+    carregarMedicamentos();
+  }, []);
 
   useEffect(() => {
     const calcularTempoRestante = () => {
       const agora = new Date();
       const horaAtual = agora.getHours() * 3600 + agora.getMinutes() * 60;
 
-      const novoMedicamentoMaisProximo = medicamentos.reduce(
-        (maisProxMed, medicamento) => {
-          const [hora, minuto] = medicamento.hora.split(":");
+      let tempoRestante = Infinity;
+      let medicamentoProximoNome = "";
+
+      for (const medicamento of medicamentos) {
+        if (medicamento && medicamento.horario) {
+          const [hora, minuto] = medicamento.horario.split(":");
           const horaMedicamento = parseInt(hora) * 3600 + parseInt(minuto) * 60;
 
-          if (
-            horaMedicamento > horaAtual &&
-            (!maisProxMed || horaMedicamento < maisProxMed.hora)
-          ) {
-            return { hora: horaMedicamento, nome: medicamento.nome };
+          const tempoAteMedicamento = horaMedicamento - horaAtual;
+
+          if (tempoAteMedicamento > 0 && tempoAteMedicamento < tempoRestante) {
+            tempoRestante = tempoAteMedicamento;
+            medicamentoProximoNome = medicamento.nome;
           }
-
-          return maisProxMed;
-        },
-        null
-      );
-
-      if (novoMedicamentoMaisProximo) {
-        setTempoRestante(novoMedicamentoMaisProximo.hora - horaAtual);
-        medicamentoMaisProximoNome.current = novoMedicamentoMaisProximo.nome;
-      } else {
-        setTempoRestante(0);
-        medicamentoMaisProximoNome.current = "";
+        }
       }
+
+      if (tempoRestante === Infinity) {
+        const primeiroMedicamento = medicamentos[0];
+        if (primeiroMedicamento && primeiroMedicamento.horario) {
+          const [hora, minuto] = primeiroMedicamento.horario.split(":");
+          const horaMedicamento = parseInt(hora) * 3600 + parseInt(minuto) * 60;
+
+          tempoRestante = 24 * 3600 - horaAtual + horaMedicamento;
+          medicamentoProximoNome = primeiroMedicamento.nome;
+        }
+      }
+
+      setTempoRestante(tempoRestante);
+      medicamentoMaisProximoNome.current = medicamentoProximoNome;
     };
 
     calcularTempoRestante();
@@ -71,7 +84,7 @@ const MeusRemedios = () => {
     const interval = setInterval(calcularTempoRestante, 1000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [medicamentos]);
 
   const horasRestantesProximo = Math.floor(tempoRestante / 3600);
   const minutosRestantesProximo = Math.floor((tempoRestante % 3600) / 60);
@@ -79,6 +92,23 @@ const MeusRemedios = () => {
   const handleCadastrarRemedio = () => {
     navigation.navigate("CadastrarRemedio");
   };
+
+  const handleExcluirRemedio = async (id) => {
+    try {
+      await deleteDoc(doc(db, "remedios", id));
+      console.log("Medicamento excluído com sucesso!");
+      const medicamentosArray = medicamentos.filter((med) => med.id !== id);
+      setMedicamentos(medicamentosArray);
+    } catch (error) {
+      console.error("Erro ao excluir medicamento: ", error);
+    }
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      carregarMedicamentos();
+    }, [])
+  );
 
   return (
     <View style={styles.meusRemedios}>
@@ -89,16 +119,17 @@ const MeusRemedios = () => {
       </Text>
       <Text style={styles.proximosRemedios}>Próximos Remédios</Text>
       <View style={styles.componenteContainer}>
-        <View style={styles.remediosContainer}>
-          {medicamentos.map((medicamento) => (
+        <ScrollView style={styles.remediosContainer}>
+          {medicamentos.map((medicamento, index) => (
             <Remedio
-              key={medicamento.key}
-              sourceImagem={medicamento.sourceImagem}
+              key={index}
+              sourceImagem={medicamento.imagem}
               nome={medicamento.nome}
-              hora={medicamento.hora}
+              horario={medicamento.horario}
+              onDelete={() => handleExcluirRemedio(medicamento.id)}
             />
           ))}
-        </View>
+        </ScrollView>
       </View>
       <View style={styles.oSeuRemedioContainer}>
         <Text style={styles.oSeuRemedio}>
@@ -166,6 +197,7 @@ const styles = StyleSheet.create({
   },
   remediosContainer: {
     marginTop: 16,
+    maxHeight: 300,
   },
   oSeuRemedioContainer: {
     top: 192,

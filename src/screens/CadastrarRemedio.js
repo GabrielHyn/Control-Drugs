@@ -4,9 +4,13 @@ import { useNavigation } from "@react-navigation/native";
 import Confirmar from "../components/Confirmar";
 import { TouchableOpacity } from "react-native";
 import { useState } from "react";
+import { db } from "../config/firebase";
+import { collection, addDoc } from "firebase/firestore";
 
-const CadastrarRemedio = () => {
+function CadastrarRemedio() {
   const navigation = useNavigation();
+
+  const imagem = require("../../assets/remedioAmarelo.png");
 
   const [medicamentoCadastrado, setMedicamentoCadastrado] = useState({
     nome: "",
@@ -15,26 +19,22 @@ const CadastrarRemedio = () => {
     horario: "",
   });
 
-  const handleRemedioCadastrado = () => {
-    const novoMedicamento = {
-      key: medicamentoCadastrado.nome,
-      sourceImagem: require("../../assets/remedioAmarelo.png"),
-      nome: medicamentoCadastrado.nome,
-      hora: medicamentoCadastrado.horario,
-    };
+  const handleRemedioCadastrado = async () => {
+    try {
+      const docRef = await addDoc(collection(db, "remedios"), {
+        nome: medicamentoCadastrado.nome,
+        dosagem: medicamentoCadastrado.dosagem,
+        descricao: medicamentoCadastrado.descricao,
+        horario: medicamentoCadastrado.horario,
+        imagem: imagem,
+      });
 
-    adicionarMedicamento(novoMedicamento);
-
-    setMedicamentoCadastrado({
-      nome: "",
-      dosagem: "",
-      descricao: "",
-      horario: "",
-    });
-    
-    navigation.navigate("RemedioCadastrado");
+      console.log("Documento escrito com ID: ", docRef.id);
+      navigation.navigate("RemedioCadastrado");
+    } catch (error) {
+      console.error("Erro ao adicionar documento: ", error);
+    }
   };
-
   return (
     <View style={styles.cadastrarRemedio}>
       <View>
@@ -124,7 +124,7 @@ const CadastrarRemedio = () => {
       </View>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {

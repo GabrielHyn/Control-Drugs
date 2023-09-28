@@ -7,12 +7,12 @@ const Splash = () => {
   const navigation = useNavigation();
   useEffect(() => {
     setTimeout(() => {
-      navigation.navigate('BemVindo');
-    }, 2000);
+      navigation.navigate("BemVindo");
+    }, 3000);
   }, []);
 
   return (
-    <View style = {styles.container}>
+    <View style={styles.container}>
       <Text style={styles.controlDrugs}>Control Drugs</Text>
       <Image
         style={[styles.maosRemedios]}
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     height: "100%",
-    backgroundColor: "#836FFF"
+    backgroundColor: "#836FFF",
   },
   controlDrugs: {
     top: 110,
